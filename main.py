@@ -6,6 +6,8 @@ import asyncio
 from dotenv import load_dotenv
 import discord
 from discord.ext import commands
+from fastapi.middleware.cors import CORSMiddleware
+
 
 load_dotenv()
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
@@ -28,6 +30,18 @@ async def lifespan(app: FastAPI):
     yield
 
 app = FastAPI(lifespan=lifespan)
+
+origins = [
+    "https://calculadora-five-livid.vercel.app",  # SEU DOMÍNIO DO FRONTEND
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/voice-channels")
 async def get_voice_channels():
