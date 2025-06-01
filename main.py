@@ -31,7 +31,7 @@ async def lifespan(app: FastAPI):
     asyncio.create_task(bot.start(DISCORD_TOKEN))
     yield
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(lifespan=lifespan)  # ou só app = FastAPI()
 
 origins = [
     "https://calculadora-five-livid.vercel.app",  # SEU DOMÍNIO DO FRONTEND
@@ -44,8 +44,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-app = FastAPI(lifespan=lifespan)  # ou só app = FastAPI()
 
 
 @app.get("/voice-channels")
