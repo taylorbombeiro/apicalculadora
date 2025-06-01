@@ -9,9 +9,10 @@ from discord.ext import commands
 from fastapi.middleware.cors import CORSMiddleware
 
 
+
 load_dotenv()
-DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
-GUILD_ID = int(os.getenv("GUILD_ID"))
+DISCORD_TOKEN ="MTM0NDE1NDQ3OTc2Mjg2NjE4OQ.GcojSO.uS8j8K0hUQqZwwIJ5LHXUcdLvFjib-DWMMyB0o"
+GUILD_ID =1344143922611359856
 
 intents = discord.Intents.default()
 intents.members = True
@@ -43,6 +44,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app = FastAPI(lifespan=lifespan)  # ou só app = FastAPI()
+
+
 @app.get("/voice-channels")
 async def get_voice_channels():
     guild = discord.utils.get(bot.guilds, id=GUILD_ID)
@@ -52,17 +56,17 @@ async def get_voice_channels():
 
 @app.get("/voice-channel-members")
 async def get_channel_members(id: int):
-    guild = discord.utils.get(bot.guilds, id=guild_id)
+    guild = discord.utils.get(bot.guilds, id=GUILD_ID)
     if not guild:
-        return {"error": "Servidor não encontrado"}
-
-    try:
-        canal_id = int(id)
-    except ValueError:
-        return {"error": "ID inválido"}
-
-    channel = discord.utils.get(guild.voice_channels, id=canal_id)
+        return {"error": "Guild não encontrado"}
+    channel = discord.utils.get(guild.voice_channels, id=id)
     if not channel:
-        return {"error": f"Canal de voz com ID {canal_id} não encontrado"}
-
+        return {"error": "Canal de voz não encontrado"}
     return [{"id": m.id, "name": m.display_name} for m in channel.members]
+
+@app.get("/debug")
+async def debug():
+    return {
+        "guilds": [g.name for g in bot.guilds],
+        "guild_ids": [g.id for g in bot.guilds]
+    }
