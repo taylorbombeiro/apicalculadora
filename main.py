@@ -11,8 +11,9 @@ from fastapi.middleware.cors import CORSMiddleware
 
 
 load_dotenv()
-DISCORD_TOKEN ="MTM0NDE1NDQ3OTc2Mjg2NjE4OQ.GcojSO.uS8j8K0hUQqZwwIJ5LHXUcdLvFjib-DWMMyB0o"
-GUILD_ID =1344143922611359856
+
+DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
+GUILD_ID = 1344143922611359856
 
 intents = discord.Intents.default()
 intents.members = True
