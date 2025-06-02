@@ -47,20 +47,7 @@ async def get_voice_channels():
         return {"error": "Guild não encontrado"}
     return [{"id": c.id, "name": c.name} for c in guild.voice_channels]
 
-@app.get("/voice-channel-members")
-async def get_channel_members(id: str):
-    try:
-        canal_id = int(id)
-    except ValueError:
-        return {"error": f"ID inválido: {id}"}
-
     channel = discord.utils.get(guild.voice_channels, id=canal_id)
-
-@app.get("/voice-channel-members")
-async def get_channel_members(id: int):
-    guild = discord.utils.get(bot.guilds, id=guild_id)
-    if not guild:
-        return {"error": "Servidor não encontrado"}
 
     print(f"🔎 ID recebido: {id}")
     print(f"🔎 Canais visíveis: {[c.id for c in guild.voice_channels]}")
@@ -80,3 +67,30 @@ async def debug_voice_channels():
         {"id": c.id, "name": c.name}
         for c in guild.voice_channels
     ]
+
+@app.get("/voice-channel-members")
+async def get_channel_members(id: str):
+    try:
+        canal_id = int(id)
+    except ValueError:
+        return {"error": f"ID inválido: {id}"}
+
+    try:
+        guild = discord.utils.get(bot.guilds, id=guild_id)
+        if not guild:
+            return {"error": "Servidor não encontrado"}
+
+        print(f"🛰️ ID recebido: {canal_id}")
+        print(f"🎧 Canais visíveis: {[c.id for c in guild.voice_channels]}")
+
+        channel = discord.utils.get(guild.voice_channels, id=canal_id)
+        if not channel:
+            return {"error": f"Canal de voz com ID {canal_id} não encontrado"}
+
+        membros = [{"id": m.id, "name": m.display_name} for m in channel.members]
+        print(f"👥 Membros conectados: {membros}")
+        return membros
+
+    except Exception as e:
+        print("🚨 ERRO INTERNO:", e)
+        return {"error": "Erro interno ao buscar membros da call"}
