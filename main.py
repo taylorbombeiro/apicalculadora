@@ -87,7 +87,7 @@ async def get_channel_members(id: str):
         if not channel:
             return {"error": f"Canal de voz com ID {canal_id} não encontrado"}
 
-        membros = [{"id": m.id, "name": m.display_name} for m in channel.members]
+        membros = [{"id": str(m.id), "name": m.display_name} for m in channel.members]
         print(f"👥 Membros conectados: {membros}")
         return membros
 
