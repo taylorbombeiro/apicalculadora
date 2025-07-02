@@ -6,6 +6,7 @@ import asyncio
 from dotenv import load_dotenv
 import discord
 from discord.ext import commands
+import uvicorn
 
 load_dotenv()
 
@@ -94,3 +95,7 @@ async def get_channel_members(id: str):
     except Exception as e:
         print("🚨 ERRO INTERNO:", e)
         return {"error": "Erro interno ao buscar membros da call"}
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 10000))  # Render define a porta pela env PORT
+    uvicorn.run("main:app", host="0.0.0.0", port=port)
